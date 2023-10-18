@@ -4,9 +4,9 @@ import {
   ShoppingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Card, Space, Statistic, Table, Typography } from "antd";
+import { Button, Card, Space, Statistic, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getCustomers, getInventory, getOrders, getRevenue } from "../../API";
+import { getCustomers, getProduct, getOrders, getRevenue } from "../../API";
 
 import {
   Chart as ChartJS,
@@ -30,20 +30,20 @@ ChartJS.register(
 
 function Dashboard() {
   const [orders, setOrders] = useState(0);
-  const [inventory, setInventory] = useState(0);
+  const [product, setProduct] = useState(0);
   const [customers, setCustomers] = useState(0);
   const [revenue, setRevenue] = useState(0);
 
   useEffect(() => {
     getOrders().then((res) => {
-      setOrders(res.total);
-      setRevenue(res.discountedTotal);
+      setOrders(res.length);
+      setRevenue(Number(res.reduce((sum, item) => sum + item.price, 0)));
     });
-    getInventory().then((res) => {
-      setInventory(res.total);
+    getProduct().then((res) => {
+      setProduct(res.length);
     });
     getCustomers().then((res) => {
-      setCustomers(res.total);
+      setCustomers(res.length);
     });
   }, []);
 
@@ -51,6 +51,36 @@ function Dashboard() {
     <Space size={20} direction="vertical">
       <Typography.Title level={4}>Dashboard</Typography.Title>
       <Space direction="horizontal">
+        <DashboardCard
+          icon={
+            <UserOutlined
+              style={{
+                color: "purple",
+                backgroundColor: "rgba(0,255,255,0.25)",
+                borderRadius: 20,
+                fontSize: 24,
+                padding: 8,
+              }}
+            />
+          }
+          title={"Customers"}
+          value={customers}
+        />
+        <DashboardCard
+          icon={
+            <ShoppingOutlined
+              style={{
+                color: "blue",
+                backgroundColor: "rgba(0,0,255,0.25)",
+                borderRadius: 20,
+                fontSize: 24,
+                padding: 8,
+              }}
+            />
+          }
+          title={"Products"}
+          value={product}
+        />
         <DashboardCard
           icon={
             <ShoppingCartOutlined
@@ -65,36 +95,6 @@ function Dashboard() {
           }
           title={"Orders"}
           value={orders}
-        />
-        <DashboardCard
-          icon={
-            <ShoppingOutlined
-              style={{
-                color: "blue",
-                backgroundColor: "rgba(0,0,255,0.25)",
-                borderRadius: 20,
-                fontSize: 24,
-                padding: 8,
-              }}
-            />
-          }
-          title={"Inventory"}
-          value={inventory}
-        />
-        <DashboardCard
-          icon={
-            <UserOutlined
-              style={{
-                color: "purple",
-                backgroundColor: "rgba(0,255,255,0.25)",
-                borderRadius: 20,
-                fontSize: 24,
-                padding: 8,
-              }}
-            />
-          }
-          title={"Customer"}
-          value={customers}
         />
         <DashboardCard
           icon={
@@ -123,10 +123,13 @@ function Dashboard() {
 function DashboardCard({ title, value, icon }) {
   return (
     <Card>
-      <Space direction="horizontal">
-        {icon}
-        <Statistic title={title} value={value} />
-      </Space>
+      
+      {/* <Button ghost borderColor="none"> */}
+        <Space direction="horizontal">
+          {icon}
+          <Statistic title={title} value={value} />
+        </Space>
+      {/* </Button> */}
     </Card>
   );
 }
@@ -137,7 +140,7 @@ function RecentOrders() {
   useEffect(() => {
     setLoading(true);
     getOrders().then((res) => {
-      setDataSource(res.products.splice(0, 3));
+      setDataSource(res.splice(0, 3));
       setLoading(false);
     });
   }, []);
@@ -149,7 +152,7 @@ function RecentOrders() {
         columns={[
           {
             title: "Title",
-            dataIndex: "title",
+            dataIndex: "product_name",
           },
           {
             title: "Quantity",
@@ -157,7 +160,7 @@ function RecentOrders() {
           },
           {
             title: "Price",
-            dataIndex: "discountedPrice",
+            dataIndex: "price",
           },
         ]}
         loading={loading}

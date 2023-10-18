@@ -14,7 +14,7 @@ function AppHeader() {
       setComments(res.comments);
     });
     getOrders().then((res) => {
-      setOrders(res.products);
+      setOrders(res);
     });
   }, []);
 
@@ -23,8 +23,8 @@ function AppHeader() {
       <Image
         width={40}
         src="https://yt3.ggpht.com/ytc/AMLnZu83ghQ28n1SqADR-RbI2BGYTrqqThAtJbfv9jcq=s176-c-k-c0x00ffffff-no-rj"
-      ></Image>
-      <Typography.Title>Aamir's Dashboard</Typography.Title>
+      />
+      <Typography.Title>Admin Panel</Typography.Title>
       <Space>
         <Badge count={comments.length} dot>
           <MailOutlined

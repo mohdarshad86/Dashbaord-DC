@@ -1,5 +1,7 @@
 import {
   AppstoreOutlined,
+  FileImageTwoTone,
+  OrderedListOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -31,24 +33,35 @@ function SideMenu() {
         items={[
           {
             label: "Dashbaord",
-            icon: <AppstoreOutlined />,
             key: "/",
-          },
-          {
-            label: "Inventory",
-            key: "/inventory",
-            icon: <ShopOutlined />,
-          },
-          {
-            label: "Orders",
-            key: "/orders",
-            icon: <ShoppingCartOutlined />,
+            icon: <AppstoreOutlined />,
           },
           {
             label: "Customers",
             key: "/customers",
             icon: <UserOutlined />,
           },
+          {
+            label: "Category",
+            key: "/categorys",
+            icon: <OrderedListOutlined />,
+          },
+          {
+            label: "Products",
+            key: "/products",
+            icon: <ShopOutlined />,
+          },
+          {
+            label: "Banners",
+            key: "/banners",
+            icon: <FileImageTwoTone />,
+          },
+          {
+            label: "Orders",
+            key: "/orders",
+            icon: <ShoppingCartOutlined />,
+          },          
+          
         ]}
       ></Menu>
     </div>

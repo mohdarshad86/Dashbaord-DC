@@ -1,4 +1,3 @@
-import { Space } from "antd";
 import "./App.css";
 import AppFooter from "./Components/AppFooter";
 import AppHeader from "./Components/AppHeader";
@@ -10,8 +9,8 @@ function App() {
     <div className="App">
       <AppHeader />
       <div className="SideMenuAndPageContent">
-        <SideMenu></SideMenu>
-        <PageContent></PageContent>
+        <SideMenu />
+        <PageContent />
       </div>
       <AppFooter />
     </div>

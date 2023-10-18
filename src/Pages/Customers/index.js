@@ -1,6 +1,7 @@
-import { Avatar, Rate, Space, Table, Typography } from "antd";
+import { Avatar, Button, Dropdown, Input, Menu, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getCustomers, getInventory } from "../../API";
+import { getCustomers } from "../../API";
+import { DownOutlined } from "@ant-design/icons";
 
 function Customers() {
   const [loading, setLoading] = useState(false);
@@ -9,7 +10,8 @@ function Customers() {
   useEffect(() => {
     setLoading(true);
     getCustomers().then((res) => {
-      setDataSource(res.users);
+      console.log(res);
+      setDataSource(res);
       setLoading(false);
     });
   }, []);
@@ -17,43 +19,80 @@ function Customers() {
   return (
     <Space size={20} direction="vertical">
       <Typography.Title level={4}>Customers</Typography.Title>
+      <Space direction="vertical">
+        <Typography.Title level={2}> Search By Name</Typography.Title>
+        <Space>
+        <Dropdown 
+        overlay={(
+          <Menu>
+            <Menu.Item key="1">Name</Menu.Item>
+            <Menu.Item key="2">Email</Menu.Item>
+            <Menu.Item key="3">Reg_id </Menu.Item>
+            <Menu.Item key="4">Pincode</Menu.Item>
+            <Menu.Item key="5">City</Menu.Item>
+          </Menu>
+        )}
+        trigger={["click"]}
+        >
+            <span>
+              Name <DownOutlined />
+            </span>
+          </Dropdown>
+          <Input
+            placeholder="Search in Customers" />
+          <Button
+            type="primary"
+          >
+            Filter
+          </Button>
+        </Space>
+      </Space>
       <Table
         loading={loading}
         columns={[
           {
             title: "Photo",
-            dataIndex: "image",
+            dataIndex: "profile_pic",
             render: (link) => {
-              return <Avatar src={link} />;
+              return <Avatar src={link ? link : "https://thumbs.dreamstime.com/b/vector-illustration-avatar-dummy-logo-collection-image-icon-stock-isolated-object-set-symbol-web-137160339.jpg"} />;
             },
           },
           {
-            title: "First Name",
-            dataIndex: "firstName",
+            title: "Name",
+            dataIndex: "name",
           },
           {
-            title: "LastName",
-            dataIndex: "lastName",
+            title: "Reg_ID",
+            dataIndex: "reg_id",
           },
+
           {
             title: "Email",
             dataIndex: "email",
           },
           {
             title: "Phone",
-            dataIndex: "phone",
+            dataIndex: "mobile",
           },
 
           {
-            title: "address",
-            dataIndex: "address",
-            render: (address) => {
+            title: "City",
+            dataIndex: ['city', 'area', 'flat_no'],
+            render: (id, address) => {
               return (
                 <span>
-                  {address.address}, {address.city}
+                  Flat no. {address.flat_no}, {address.area}, {address.city}
                 </span>
               );
             },
+          },
+          {
+            title: "Landmark",
+            dataIndex: "landmark",
+          },
+          {
+            title: "Pincode",
+            dataIndex: "pincode",
           },
         ]}
         dataSource={dataSource}
